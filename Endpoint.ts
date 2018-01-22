@@ -8,6 +8,15 @@ import {Room} from "./Room";
 import {IndexedDataSet} from "./DCDataModel";
 import {Control} from "./Control";
 
+/*
+ Additional statuses:
+     NoCommunicator
+     CommunicatorStarting
+     NoPing
+     ConnectTimeout
+     Unresponsive
+ */
+
 export enum EndpointStatus {
     Online,
     Disabled,

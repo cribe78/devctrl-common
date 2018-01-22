@@ -33,18 +33,8 @@ export class DCDataModel {
     tables: {
         [index: string] : IndexedDataSet<DCSerializable>
     } = {};
-    /**
-    endpoints : IndexedDataSet<Endpoint> = {};
-    //endpoint_types : IndexedDataSet<EndpointType> = {};
-    //controls : IndexedDataSet<Control> = {};
-    panels: IndexedDataSet<Panel> = {};
-    panel_controls: IndexedDataSet<PanelControl> = {};
-    rooms: IndexedDataSet<Room> = {};
-    watcher_rules: IndexedDataSet<ActionTrigger> = {};
-    option_sets: IndexedDataSet<OptionSet> = {};
-    userInfo : IndexedDataSet<UserInfo> = {};
-    **/
-     debug: (message: any, ...args: any[]) => void;
+
+    debug: (message: any, ...args: any[]) => void;
     sortedArrays : any = {};
 
     typeList = [
