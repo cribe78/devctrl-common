@@ -48,6 +48,7 @@ export enum DCFieldType {
     fk = "fk",
     object = "object",
     watcherActionValue = "watcher-action-value",
+    endpointStatus = "endpoint-status",
     any = "any"
 }
 
@@ -56,6 +57,7 @@ export interface IDCFieldDefinition {
     name: string;
     type: DCFieldType;
     optional?: boolean;
+    defaultValue?: any;
     label: string;
     options?: {
         name : string;
@@ -168,8 +170,12 @@ export abstract class DCSerializable {
                 if (field.optional) {
                     continue;
                 }
-
-                throw new Error("Invalid " + this.table + " object, " + field.name + " must be defined for " + this.id);
+                else if (typeof field.defaultValue !== 'undefined') {
+                    data[field.name] = field.defaultValue;
+                }
+                else {
+                    throw new Error("Invalid " + this.table + " object, " + field.name + " must be defined for " + this.id);
+                }
             }
 
             this[field.name] = data[field.name];

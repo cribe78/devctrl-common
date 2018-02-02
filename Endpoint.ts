@@ -8,26 +8,21 @@ import {Room} from "./Room";
 import {IndexedDataSet} from "./DCDataModel";
 import {Control} from "./Control";
 
-/*
- Additional statuses:
-     NoCommunicator
-     CommunicatorStarting
-     NoPing
-     ConnectTimeout
-     Unresponsive
- */
-
-export enum EndpointStatus {
-    Online,
-    Disabled,
-    Offline,
-    Unknown
+export interface IEndpointStatus {
+    enabled?: boolean; // Is the Endpoint set to enabled (through DevCtrl UI)?
+    messengerConnected?: boolean; // Has the communicator established a connection to the messenger?
+    reachable?: boolean; // Is the endpoint pingable?
+    connected?: boolean; // Has a TCP connection to the device been established?
+    loggedIn?: boolean; // Has the communicator successfully logged in to the device?
+    polling?: boolean; // Is the communicator polling the device
+    responsive?: boolean; // Is the device satisfactorily responding to communications?
+    ok?: boolean; // Are all other members true?
 }
 
 
 export interface EndpointData extends DCSerializableData {
     endpoint_type_id: string;
-    status: EndpointStatus;
+    epStatus: IEndpointStatus;
     ip: string;
     port: number;
     enabled: boolean;
@@ -40,11 +35,21 @@ export class Endpoint extends DCSerializable {
     private _room: Room;
     endpoint_type_id: string;
     room_id : string;
-    status: EndpointStatus = EndpointStatus.Offline;
+    epStatus: IEndpointStatus = {
+        enabled: false,
+        messengerConnected: false,
+        reachable: false,
+        connected: false,
+        loggedIn: false,
+        polling: false,
+        responsive: false,
+        ok: false
+    };
+
     ip: string = "";
     port: number = 0;
     config: any = {};
-    enabled: boolean = false;
+
     private _commLogOptions : string = "default";
     commLogOptionsObj : {};
 
@@ -106,17 +111,26 @@ export class Endpoint extends DCSerializable {
                 tooltip: "comma seperated list.  options include: polling, matching, rawData, connection, updates"
             },
             {
-                name: "status",
-                type: DCFieldType.string,
+                name: "epStatus",
+                type: DCFieldType.endpointStatus,
                 label: "Status",
-                inputDisabled: true,
-                tooltip: "The current communications status of the Endpoint"
+                tooltip: "The current communications status of the Endpoint",
+                defaultValue: {
+                    enabled: false,
+                    messengerConnected: false,
+                    reachable: false,
+                    connectionEstablished: false,
+                    loggedIn: false,
+                    responsive: false,
+                    ok: false
+                }
             },
             {
                 name: "enabled",
                 type: DCFieldType.bool,
                 label: "Enabled?",
-                tooltip: "Disable to prevent connection attempts to the Endpoint"
+                tooltip: "Disable to prevent connection attempts to the Endpoint",
+                defaultValue: false
             },
             {
                 name: "room_id",
@@ -141,6 +155,33 @@ export class Endpoint extends DCSerializable {
         this.ip = address;
     }
 
+    cloneStatus() : IEndpointStatus {
+        let es = this.epStatus;
+        return {
+            enabled: es.enabled,
+            messengerConnected: es.messengerConnected,
+            reachable: es.reachable,
+            connected: es.connected,
+            loggedIn: es.loggedIn,
+            polling: es.polling,
+            responsive: es.responsive,
+            ok: es.ok
+        }
+    }
+
+    compareStatus(es2: IEndpointStatus) : boolean {
+        let es = this.epStatus;
+
+        for (let f in es2) {
+            if (es2[f] != es[f]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     get commLogOptions() {
         return this._commLogOptions;
     }
@@ -156,6 +197,14 @@ export class Endpoint extends DCSerializable {
         }
     }
 
+    get enabled() : boolean {
+        return this.epStatus.enabled;
+    }
+
+    set enabled(val: boolean) {
+        this.epStatus.enabled = val;
+    }
+
     get room() : Room {
         return this._room;
     }
@@ -163,6 +212,33 @@ export class Endpoint extends DCSerializable {
     set room(newRoom : Room) {
         this.room_id = newRoom._id;
         this._room = newRoom;
+    }
+
+    statusDiff(es2: IEndpointStatus) : IEndpointStatus {
+        let statusDiff : IEndpointStatus = {};
+        let es = this.epStatus;
+
+        for (let f in es2) {
+            if (es2[f] != es[f]) {
+                statusDiff[f] = es2[f];
+            }
+        }
+
+        return statusDiff;
+    }
+
+    get statusStr() : string {
+        let statusStr = "";
+        statusStr += this.epStatus.messengerConnected ? "MSGR " : ".... ";
+        statusStr += this.epStatus.enabled ? "EN " : ".. ";
+        statusStr += this.epStatus.reachable ? "PING " : ".... ";
+        statusStr += this.epStatus.connected ? "CONN " : ".... ";
+        statusStr += this.epStatus.loggedIn ? "LGIN " : ".... ";
+        statusStr += this.epStatus.polling ? "POLL " : ".... ";
+        statusStr += this.epStatus.responsive ? "RSPV " : ".... ";
+        statusStr += this.epStatus.ok ? "OK" : "..";
+
+        return statusStr;
     }
 
     get type(): EndpointType {
