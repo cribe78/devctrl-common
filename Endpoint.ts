@@ -261,6 +261,8 @@ export class Endpoint extends DCSerializable {
     }
 
     getDataObject() : EndpointData {
-        return (<EndpointData>DCSerializable.defaultDataObject(this));
+        let obj = <EndpointData>DCSerializable.defaultDataObject(this);
+        obj.epStatus = this.cloneStatus();
+        return obj;
     }
 }
