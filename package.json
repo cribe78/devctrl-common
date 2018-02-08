@@ -1,6 +1,6 @@
 {
   "name": "@devctrl/common",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Common files for devctrl server and web apps",
   "main": "index.js",
   "scripts": {
