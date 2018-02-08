@@ -19,6 +19,11 @@ export interface IEndpointStatus {
     ok?: boolean; // Are all other members true?
 }
 
+export interface IDCEndpointStatusUpdate {
+    _id: string;
+    status: IEndpointStatus;
+}
+
 
 export interface EndpointData extends DCSerializableData {
     endpoint_type_id: string;

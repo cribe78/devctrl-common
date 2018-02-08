@@ -75,8 +75,6 @@ export class DCDataModel {
             let tableStr = addTables.join(", ");
             this.debug("loadData from " + tableStr);
 
-            // There is some boilerplate here that is necessary to allow typescript
-            // to perform its type checking magic.
 
             for (let t in add) {
                 this.loadTableData(add[t], t);
@@ -103,24 +101,6 @@ export class DCDataModel {
                     this.indexForeignKeys(this.tables[t]);
                 }
             }
-
-            /**
-            if (add.endpoints || add.endpoint_types) {
-                this.indexForeignKeys(this.endpoints);
-            }
-            if (add.controls || add.control_templates || add.option_sets) {
-                this.indexForeignKeys(this.controls);
-            }
-            if (add.panels || add.rooms) {
-                this.indexForeignKeys(this.panels);
-            }
-            if (add.controls || add.panels || add.panel_controls) {
-                this.indexForeignKeys(this.panel_controls);
-            }
-            if (add.controls || add.watcher_rules) {
-                this.indexForeignKeys(this.watcher_rules);
-            }
-             **/
         }
 
         if (data.delete) {
