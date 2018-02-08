@@ -103,8 +103,8 @@ export class DCDataModel {
             }
         }
 
-        if (data.delete) {
-            let del = (<IDCDataDelete>data.delete);
+        if (data.del) {
+            let del = (<IDCDataDelete>data.del);
             let table = del.table;
             let _id = del._id;
 
@@ -179,8 +179,18 @@ export class DCDataModel {
         return (this.tables[table][id]);
     }
 
-    getTableItem(id: string, table: string) : DCSerializable {
-        return this.getItem(id, table);
+    getTableSerialized(table: string) : IndexedDataSet<DCSerializableData>  {
+        if (this.tables[table]) {
+            let t = {};
+
+            for (let id in this.tables[table]) {
+                t[id] = this.tables[table][id].getDataObject();
+            }
+
+            return t;
+        }
+
+        return {};
     }
 
 

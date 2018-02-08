@@ -21,6 +21,8 @@ export interface IEndpointStatus {
 
 export interface IDCEndpointStatusUpdate {
     _id: string;
+    userInfo_id: string;
+    endpoint_id: string;
     status: IEndpointStatus;
 }
 

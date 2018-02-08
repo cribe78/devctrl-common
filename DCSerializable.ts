@@ -5,7 +5,11 @@
  */
 
 export interface IDCDataAdd {
-    [index: string] : DCSerializableData[]
+    _id: string;
+    userInfo_id: string;
+    add: {
+        [index: string] : DCSerializableData[]
+    }
 }
 
 
@@ -15,16 +19,19 @@ export interface IDCDataDelete {
 }
 
 export interface IDCDataExchange {
+    _id: string;
+    userInfo_id: string;
     add?: {
         [index: string] : {
             [index: string] : DCSerializableData
         }
     },
-    delete?: IDCDataDelete,
+    del?: IDCDataDelete,
     error?: string
 }
 
 export interface IDCDataRequest {
+    _id: string;
     table: string;
     params: any;
 }
@@ -152,8 +159,9 @@ export abstract class DCSerializable {
     };
 
 
-    itemRequestData(): IDCDataRequest {
+    itemRequestData(guid: string): IDCDataRequest {
         return {
+            _id: guid,
             table: this.table,
             params: {_id: this._id}
         };
