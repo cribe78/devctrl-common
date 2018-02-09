@@ -27,12 +27,12 @@ export interface IDCEndpointStatusUpdate {
 }
 
 
+
 export interface EndpointData extends DCSerializableData {
     endpoint_type_id: string;
     epStatus: IEndpointStatus;
     ip: string;
     port: number;
-    enabled: boolean;
     commLogOptions: string;
 }
 
@@ -131,13 +131,6 @@ export class Endpoint extends DCSerializable {
                     responsive: false,
                     ok: false
                 }
-            },
-            {
-                name: "enabled",
-                type: DCFieldType.bool,
-                label: "Enabled?",
-                tooltip: "Disable to prevent connection attempts to the Endpoint",
-                defaultValue: false
             },
             {
                 name: "room_id",
