@@ -1,7 +1,8 @@
-import {DCSerializableData, DCSerializable} from "./DCSerializable";
+import {DCSerializableData, DCSerializable, DCFieldType} from "./DCSerializable";
 
 export interface RoomData extends DCSerializableData {
     name: string;
+    config: any;
 }
 
 
@@ -18,16 +19,19 @@ export class Room extends DCSerializable {
             'panels' : {}
         };
 
+
+        this.fieldDefinitions = this.fieldDefinitions.concat([
+            {
+                name: "config",
+                type: DCFieldType.object,
+                label: "Room Config Data",
+                tooltip: "Room configuration object",
+                defaultValue: {}
+            }
+        ]);
+
         if (data) {
             this.loadData(data);
         }
     }
-
-    getDataObject() : RoomData {
-        return {
-            _id: this._id,
-            name: this.name
-        }
-    }
-
 }
