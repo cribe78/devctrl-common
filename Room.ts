@@ -10,6 +10,7 @@ export class Room extends DCSerializable {
     static tableStr = "rooms";
     tableLabel = "Rooms";
     table: string;
+    config : any = {};
 
     constructor(_id: string, data?: RoomData) {
         super(_id);
