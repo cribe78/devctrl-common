@@ -36,6 +36,15 @@ export interface IDCDataRequest {
     params: any;
 }
 
+// for allowing non-admin users to make specific config changes
+export interface IDCStudentNameUpdate {
+    _id: string,
+    control_id: string,
+    course: string,
+    section: string,
+    seat: number
+}
+
 
 export interface DCSerializableData {
     _id: string,
