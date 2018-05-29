@@ -42,7 +42,8 @@ export interface IDCStudentNameUpdate {
     control_id: string,
     course: string,
     section: string,
-    seat: number
+    seat: number,
+    name: string
 }
 
 
