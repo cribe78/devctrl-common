@@ -56,9 +56,11 @@ export class Control extends DCSerializable {
     static CONTROL_TYPE_BOOLEAN = "boolean";
     static CONTROL_TYPE_ECHO = "echo"; // For echo controls, ncontrol just returns the value specified
     static CONTROL_TYPE_INT = "int";
+    static CONTROL_TYPE_FLOAT = "float";
     static CONTROL_TYPE_RANGE = "range";
     static CONTROL_TYPE_STRING = "string";
     static CONTROL_TYPE_XY = "xy";
+    static CONTROL_TYPE_OBJECT = "object";
 
     static USERTYPE_BUTTON = "button";
     static USERTYPE_BUTTON_SET = "button-set";
@@ -116,9 +118,11 @@ export class Control extends DCSerializable {
                 { name: "boolean", value: Control.CONTROL_TYPE_BOOLEAN},
                 { name: "echo", value: Control.CONTROL_TYPE_ECHO},
                 { name: "int", value: Control.CONTROL_TYPE_INT},
+                { name: "float", value: Control.CONTROL_TYPE_FLOAT},
                 { name: "range", value: Control.CONTROL_TYPE_RANGE},
                 { name: "string", value: Control.CONTROL_TYPE_STRING},
-                { name: "xy", value: Control.CONTROL_TYPE_XY}
+                { name: "xy", value: Control.CONTROL_TYPE_XY},
+                { name: "object", value: Control.CONTROL_TYPE_OBJECT}
             ],
             tooltip: "Defined and used by the NControl communicator",
             inputDisabled: true
@@ -202,8 +206,12 @@ export class Control extends DCSerializable {
     }
 
     coerceValue() {
+        //TODO: this needs to be expanded to other types, but testing is required to ensure existing communicators are not affected
         if (this.control_type == Control.CONTROL_TYPE_STRING && typeof this._value == 'number') {
             this._value = "" + this._value;
+        }
+        else if (this.control_type == Control.CONTROL_TYPE_FLOAT && typeof this._value == 'string') {
+            this._value = parseFloat(this._value);
         }
     }
 
@@ -221,22 +229,18 @@ export class Control extends DCSerializable {
         if (this.option_set && this.option_set.options) {
             options = this.option_set.options;
         }
-        else {
-            options = !!this.config.options ? this.config.options : {};
+        else if (this.config.options) {
+            // config.options should be an object. Values are property names, property values are option names
+            options = this.config.options;
         }
+        else {
+            options = {};
+        }
+
 
         return options;
     }
 
-    selectOptionsArray() {
-        let options = this.selectOptions();
-
-        let optionsArray = Object.keys(options).map( value => {
-            return { name: options[value], value: value };
-        });
-
-        return optionsArray;
-    }
 
     selectValueName(val = null) {
         if (val == null) {
