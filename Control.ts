@@ -76,6 +76,7 @@ export class Control extends DCSerializable {
     static USERTYPE_LEVEL = "level";
     static USERTYPE_SELECT = "select";
     static USERTYPE_SELECT_READONLY = "select-readonly";
+    static USERTYPE_TREE_READONLY = "tree-readonly";
 
     ownFields : IDCFieldDefinition[] = [
         {
@@ -106,7 +107,8 @@ export class Control extends DCSerializable {
                 { name: "Select (readonly)", value: Control.USERTYPE_SELECT_READONLY},
                 { name: "Slider", value: Control.USERTYPE_SLIDER},
                 { name: "2D Slider", value: Control.USERTYPE_SLIDER_2D},
-                { name: "Switch", value: Control.USERTYPE_SWITCH}
+                { name: "Switch", value: Control.USERTYPE_SWITCH},
+                { name: "Tree (readonly)", value: Control.USERTYPE_TREE_READONLY}
             ],
             tooltip: "Determines how this Control is displayed in the UI"
         },
