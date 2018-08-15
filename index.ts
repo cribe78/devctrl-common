@@ -1,6 +1,7 @@
 export * from "./ActionLog";
 export * from "./ActionTrigger";
 export * from "./Control";
+export * from "./ControlConfig/ArrowButtonSetControlConfig";
 export * from "./ControlUpdate"
 export * from "./DCDataModel";
 export * from "./DCSerializable";

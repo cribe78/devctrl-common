@@ -62,6 +62,7 @@ export class Control extends DCSerializable {
     static CONTROL_TYPE_XY = "xy";
     static CONTROL_TYPE_OBJECT = "object";
 
+    static USERTYPE_ARROW_BUTTON_SET = "arrow-button-set";
     static USERTYPE_BUTTON = "button";
     static USERTYPE_BUTTON_SET = "button-set";
     static USERTYPE_CLQL_FADER = "clql-fader";
